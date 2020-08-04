@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    {% if user.is_authenticated %}
+    <h1>POSTING</h1>
+    <a href="{% url 'posts:new' %}" class="btn btn-dark">+추가</a>
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-md-8 col-12">
+                <div class="card" style="width: 68rem; margin-top: 20px;">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.title }} / {{ post.updated_at }}</h2>
+                        <h5>조회수 {{ post.view_count }}</h5>
+                        <a href="{% url 'posts:like' post.id %}">
+                            {% if user in post.like_users.all %}
+                                <a href="{% url 'posts:like' post.id %}"><i class="fas fa-heart"></i></a>
+                            {% else %}
+                                <a href="{% url 'posts:like' post.id %}"><i class="far fa-heart"></i></a>
+                            {% endif %}
+                        </a>
+                        <h5> {{ post.like_users.count }}  </h5>
+                        <a href="{% url 'posts:show' post.pk %}" class="btn btn-secondary" style="width: 100px; margin-left: 950px;">보기</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div style="margin-right: auto; margin-left: auto;">
+            <h3>로그인 후 이용이 가능합다.</h3>
+            <a href="{% url 'account_login' %}" class="btn btn-warning">로그인</a>
+            <a href="{% url 'account_signup' %}" class="btn btn-warning">회원가입</a>
+        </div>
+    {% endif %}
+</div>
+    
+{% endblock %}
